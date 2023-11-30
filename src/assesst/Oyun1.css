@@ -1,0 +1,15 @@
+.oyun1 {
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    margin-bottom: 5px;
+}
+.baslik {
+    background-color: lightgray;
+    padding: 10px;
+    border-radius: 10px;
+    color: black;
+    width: 100%;
+    box-sizing: border-box;
+}

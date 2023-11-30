@@ -1,6 +1,6 @@
 import logo from "./images/by.png";
 
-import './App.css';
+import './assesst/App.css';
 import Anasayfa from "./components/Anasayfa";
 import {Route, Routes, useParams} from 'react-router-dom';
 import {Alert, Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
@@ -46,11 +46,13 @@ function App() {
                            <Route path="/oyun2" element={<Oyun2/>}/>
                        </Routes>
 
-                        <Alert variant="primary" className="mt-3">
-                            <Routes>
-                                <Route path="/:id" element={<Child />} />
-                            </Routes>
-                        </Alert>
+                        <div className="fixed-bottom">
+                            <div className="custom-info mt-3">
+                                <Routes>
+                                    <Route path="/:id" element={<Child />} />
+                                </Routes>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,7 +67,7 @@ function Child() {
     let {id}=useParams();
     return(
         <div>
-            <h6>ID: {id}</h6>
+            <span style={{fontSize:'15px'}}>Id: {id}</span>
         </div>
     )
 }
