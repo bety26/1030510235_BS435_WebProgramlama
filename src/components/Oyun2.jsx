@@ -1,10 +1,137 @@
-import React  from "react";
-import {Alert} from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+
+import "../assesst/Oyun2.css";
+import {Button, ButtonGroup, Col, Container, Form, Row} from "react-bootstrap";
+import {Label} from "reactstrap";
+
 function Oyun2(){
+    const [seciliZorluk, setSeciliZorluk] = useState(10);
+
+    const [mesaj, setMesaj] = useState('Beni Tahmin Et!');
+    const [secilenDeger, setSecilenDeger] = useState('');
+    const [hedefSayi, setHedefSayi] = useState(null);
+
+    function secilenDegerHandler(deger) {
+        if (mesaj !== "Doğru Tahmin") {
+            setSecilenDeger(deger);
+            tahmin();
+        }
+    }
+
+    useEffect(() => {
+        setSecilenDeger('');
+        setMesaj('Beni Tahmin Et!');
+    }, [seciliZorluk]);
+
+    const rastgeleSayi = () => {
+        return Math.floor(Math.random() * seciliZorluk) + 1;
+    };
+    useEffect(() => {
+        setHedefSayi(rastgeleSayi());
+    }, [seciliZorluk]);
+
+    const tahmin = () => {
+        const sonuc = hedefSayi === secilenDeger ? 'Doğru Tahmin' : 'Yanlış Tahmin';
+        setMesaj(`Sonu.: ${sonuc}`);
+        return sonuc;
+    }
+    const handleRadioChange = (value) => {
+        setSeciliZorluk(value);
+    }
+    const renderButtons = () => {
+        const buttonCount = seciliZorluk;
+        const buttons = [];
+        let buttonGroup = [];
+
+        for (let i = 1; i <= buttonCount; i++) {
+            buttonGroup.push(
+                <Button key={i} variant="primary" onClick={() => secilenDegerHandler(i)}>{i}</Button>
+            );
+            if (buttonGroup.length > 0) {
+                buttons.push(
+                    <ButtonGroup
+                        key={`button-group-${i}`}
+                        size="lg"
+                        className="mb-3 me-2"
+                        aria-label="Button group">
+                        {buttonGroup}
+                    </ButtonGroup>
+                );
+                buttonGroup = []; //mevcut butonları sıfırlar yeni küme için
+            }
+        }
+        return buttons;
+    };
     return(
-        <Alert variant="warning" className="mt-3">
-            Oyun 2 sayfası
-        </Alert>
-    )
+        <div className="container">
+            <div className="oyun2">
+                <h1 className="baslik2"> Oyun 2</h1>
+                <Container>
+                    <Row>
+                        <Col xs={2}>
+                            <Form>
+                                <Form.Group className="text-right baslik2">
+                                    <p className="zorlukBaslik">Zorluk Derecesi</p>
+                                    <div key={'reverse-radio'} className="mb-3 zorlukSecenek">
+                                        <Form.Check
+                                            reverse
+                                            label="Basit"
+                                            name="group1"
+                                            type="radio"
+                                            id={`reverse-radio-1`}
+                                            value={10}
+                                            checked={seciliZorluk === 10}
+                                            onChange={() => handleRadioChange(10)}
+                                        >
+                                        </Form.Check>
+                                        <Form.Check
+                                            reverse
+                                            label="Orta"
+                                            name="group1"
+                                            type="radio"
+                                            id={`reverse-radio-2`}
+                                            value={100}
+                                            checked={seciliZorluk === 100}
+                                            onChange={() => handleRadioChange(100)}
+                                        >
+                                        </Form.Check>
+                                        <Form.Check
+                                            reverse
+                                            label="Zor"
+                                            type="radio"
+                                            id={`reverse-radio-3`}
+                                            value={100}
+                                            checked={seciliZorluk === 50}
+                                            onChange={() => handleRadioChange(50)}
+                                        >
+                                        </Form.Check>
+                                    </div>
+                                </Form.Group>
+                            </Form>
+                        </Col>
+                        <Col xs={10} >
+                            <h1 className="secenekBaslik">
+                                {secilenDeger === ''
+                                    ? 'Beni Tahmin Et!'
+                                    :(secilenDeger === hedefSayi
+                                        ? 'Doğru Tahmin'
+                                        : 'Yanlış Tahmin')}
+                            </h1>
+                            <div className="button-container mt-3">{renderButtons()}</div>
+                        </Col>
+
+
+
+                        <Label>rastgele sayı: {hedefSayi}</Label>
+                        <Label>seçilen sayı: {secilenDeger}</Label>
+                        <Label>sonuç: {
+                            secilenDeger===''
+                                ? 'Beni Tahmin Et!'
+                                :(secilenDeger===hedefSayi ?'doğru' : 'yanlış')}</Label>
+                    </Row>
+                </Container>
+            </div>
+        </div>
+    );
 }
 export  default Oyun2
