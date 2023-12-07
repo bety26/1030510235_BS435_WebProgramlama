@@ -1,0 +1,32 @@
+.oyun2{
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    margin-bottom: 5px;
+}
+.baslik2 {
+    background-color: #bae8fa;
+    color: #055473;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.custom-radio-group {
+    display: flex;
+    flex-direction: row-reverse;
+}
+.zorlukBaslik{
+    text-align: right;
+    font-weight: bold;
+    color: #055473;
+}
+.zorlukSecenek{
+    color: #055473;
+}
+.secenekBaslik {
+    text-align: center;
+    font-weight: bold;
+    color: #055473;
+}
