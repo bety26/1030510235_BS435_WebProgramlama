@@ -6,6 +6,7 @@ import {Label} from "reactstrap";
 
 function Oyun2(){
     const [seciliZorluk, setSeciliZorluk] = useState(10);
+    const [buttonDurum,setButtonDurum] = useState(Array.from({length: seciliZorluk}, () => true))
 
     const [mesaj, setMesaj] = useState('Beni Tahmin Et!');
     const [secilenDeger, setSecilenDeger] = useState('');
@@ -14,6 +15,10 @@ function Oyun2(){
     function secilenDegerHandler(deger) {
         if (mesaj !== "Doğru Tahmin") {
             setSecilenDeger(deger);
+
+            const  yeniButonDurumlari = buttonDurum.map((durum, index) =>
+                index === deger -1 ? false : durum);
+            setButtonDurum(yeniButonDurumlari);
             tahmin();
         }
     }
@@ -21,6 +26,7 @@ function Oyun2(){
     useEffect(() => {
         setSecilenDeger('');
         setMesaj('Beni Tahmin Et!');
+        setButtonDurum(Array.from({length: seciliZorluk}, () => true));
     }, [seciliZorluk]);
 
     const rastgeleSayi = () => {
@@ -38,15 +44,30 @@ function Oyun2(){
     const handleRadioChange = (value) => {
         setSeciliZorluk(value);
     }
+    const handleYenidenDene = () => {
+        setHedefSayi(rastgeleSayi());
+        setSecilenDeger('');
+        setMesaj('Beni Tahmin Et!');
+        setButtonDurum(Array.from({length: seciliZorluk}, () => true));
+    }
     const renderButtons = () => {
         const buttonCount = seciliZorluk;
         const buttons = [];
         let buttonGroup = [];
 
+        const tumButonlarAktif = buttonDurum.every(durum =>durum);
+
         for (let i = 1; i <= buttonCount; i++) {
             buttonGroup.push(
-                <Button key={i} variant="primary" onClick={() => secilenDegerHandler(i)}>{i}</Button>
+                <Button key={i}
+                        variant="primary"
+                        onClick={() => secilenDegerHandler(i)}
+                disabled={!buttonDurum[i-1] || secilenDeger === hedefSayi}>
+                    {i}
+                </Button>
             );
+
+
             if (buttonGroup.length > 0) {
                 buttons.push(
                     <ButtonGroup
@@ -60,8 +81,10 @@ function Oyun2(){
                 buttonGroup = []; //mevcut butonları sıfırlar yeni küme için
             }
         }
-        return buttons;
+        return {buttons, tumButonlarAktif};
     };
+    const {buttons,tumButonlarAktif} = renderButtons();
+
     return(
         <div className="container">
             <div className="oyun2">
@@ -109,7 +132,13 @@ function Oyun2(){
                                 </Form.Group>
                             </Form>
                         </Col>
-                        <Col xs={10} >
+                        <Col xs={10} className="d-grid gap-2 my-2">
+                            <Button
+                                onClick={handleYenidenDene}
+                                disabled={tumButonlarAktif}
+                                size="lg">
+                                Yeniden Dene
+                            </Button>
                             <h1 className="secenekBaslik">
                                 {secilenDeger === ''
                                     ? 'Beni Tahmin Et!'
@@ -117,7 +146,7 @@ function Oyun2(){
                                         ? 'Doğru Tahmin'
                                         : 'Yanlış Tahmin')}
                             </h1>
-                            <div className="button-container mt-3">{renderButtons()}</div>
+                            <div className="button-container mt-3">{buttons}</div>
                         </Col>
 
 
